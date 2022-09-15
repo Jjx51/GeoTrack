@@ -7,13 +7,16 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.PendingIntent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingClient;
+import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,6 +25,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.jjx51.geotrack.databinding.ActivityMapsBinding;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
@@ -29,11 +34,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
     private GeofencingClient geofencingClient;
+    private GeofenceHelper geofenceHelper;
     //
     private static final String TAG = "MapsActivity";
     private int FINE_LOCATION_ACCESS_REQUEST_CODE=10001;
     private int BACKGROUND_LOCATION_ACCESS_REQUEST_CODE = 10002;
     private float GEOFENCE_RADIUS = 50;
+    private String GEOFENCE_ID="SOME_GEOFENCE_ID"; //Hardcode
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +56,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //
         geofencingClient = LocationServices.getGeofencingClient(this);
+        geofenceHelper = new GeofenceHelper(this);
     }
 
     @Override
@@ -108,6 +116,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.clear();
         addMarker(latLng);
         addCircle(latLng,GEOFENCE_RADIUS);
+        addGeofence(latLng,GEOFENCE_RADIUS);
+    }
+
+    @SuppressLint("MissingPermission")
+    private void addGeofence(LatLng latLng, float radius){
+        Geofence geofence = geofenceHelper.getGeofence(GEOFENCE_ID,latLng,radius,Geofence.GEOFENCE_TRANSITION_ENTER|Geofence.GEOFENCE_TRANSITION_DWELL|Geofence.GEOFENCE_TRANSITION_EXIT);
+        GeofencingRequest geofencingRequest= geofenceHelper.getGeofencingRequest(geofence);
+        PendingIntent pendingIntent = geofenceHelper.getPendingIntent();
+        geofencingClient.addGeofences(geofencingRequest,pendingIntent).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d(TAG, "onSuccess: Geofence Added");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                String errorMessage = geofenceHelper.getErrorString(e);
+                Log.d(TAG, "onFailure: "+errorMessage);
+            }
+        });
     }
 
     private void addMarker(LatLng latLng) {
