@@ -31,12 +31,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.jjx51.geotrack.Data.Model.StatusGeofenceModel;
 import com.jjx51.geotrack.Services.GeofenceHelper;
 import com.jjx51.geotrack.R;
-import com.jjx51.geotrack.Repository.StatusGeofenceRepository;
-import com.jjx51.geotrack.databinding.ActivityMapsBinding;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener{
     public static final String TAG= MainActivity.class.getName();
@@ -48,11 +44,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private int FINE_LOCATION_ACCESS_REQUEST_CODE=10001;
     private int BACKGROUND_LOCATION_ACCESS_REQUEST_CODE = 10002;
 
-    private float GEOFENCE_RADIUS = 30;
+    private float GEOFENCE_RADIUS = 200;
     private String GEOFENCE_ID="SOME_GEOFENCE_ID"; //Hardcode
-
-    //firebase
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     //Views
     Button buttonLocation;
@@ -133,13 +126,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         updateCoordinates(latLng);
         addCircle(latLng, GEOFENCE_RADIUS);
         addGeofence(latLng, GEOFENCE_RADIUS);
-        saveData(latLng);
-    }
-
-    private void saveData(LatLng latLng) {
-        StatusGeofenceRepository statusGeofenceRepository = new StatusGeofenceRepository();
-        StatusGeofenceModel statusGeofence= new StatusGeofenceModel(latLng.longitude,latLng.latitude,false);
-        statusGeofenceRepository.createData(statusGeofence);
     }
 
     private void updateCoordinates(LatLng latLng) {
