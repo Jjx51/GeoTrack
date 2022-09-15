@@ -41,7 +41,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private int FINE_LOCATION_ACCESS_REQUEST_CODE=10001;
     private int BACKGROUND_LOCATION_ACCESS_REQUEST_CODE = 10002;
 
-    private float GEOFENCE_RADIUS = 50;
+    private float GEOFENCE_RADIUS = 30;
     private String GEOFENCE_ID="SOME_GEOFENCE_ID"; //Hardcode
 
     @Override
@@ -90,6 +90,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
         if (requestCode == FINE_LOCATION_ACCESS_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 //We have the permission
@@ -142,9 +143,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @SuppressLint("MissingPermission")
     private void addGeofence(LatLng latLng, float radius){
-        Geofence geofence = geofenceHelper.getGeofence(GEOFENCE_ID,latLng,radius,Geofence.GEOFENCE_TRANSITION_ENTER|Geofence.GEOFENCE_TRANSITION_DWELL|Geofence.GEOFENCE_TRANSITION_EXIT);
+        Geofence geofence = geofenceHelper.getGeofence(GEOFENCE_ID, latLng, radius, Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL | Geofence.GEOFENCE_TRANSITION_EXIT);
         GeofencingRequest geofencingRequest= geofenceHelper.getGeofencingRequest(geofence);
         PendingIntent pendingIntent = geofenceHelper.getPendingIntent();
+
         geofencingClient.addGeofences(geofencingRequest,pendingIntent)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -155,7 +157,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onFailure(@NonNull Exception e) {
                 String errorMessage = geofenceHelper.getErrorString(e);
-                Log.d(TAG, "onFailure: Aqui falla");
                 Log.d(TAG, "onFailure: "+errorMessage);
             }
         });
