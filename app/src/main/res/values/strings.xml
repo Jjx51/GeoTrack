@@ -9,4 +9,5 @@
     <string name="empty">-</string>
     <string name="latitud_example">19.11038594994151</string>
     <string name="longitude">Longitud</string>
+    <string name="inactive">Inactivo</string>
 </resources>

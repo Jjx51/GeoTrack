@@ -9,7 +9,7 @@
     <style name="textViewTitle" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/purple_500</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">22sp</item>
     </style>
 
     <style name="textViewMain" parent="TextAppearance.AppCompat">
