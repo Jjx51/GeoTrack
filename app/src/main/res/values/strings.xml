@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">GeoTrack</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="button_location">Permiso de ubicación</string>
+    <string name="button_tracker">Permiso de rastreo</string>
+    <string name="statusOfGeofence">"Estado del Geofence: "</string>
+    <string name="latitud">Latitud</string>
+    <string name="status">Estatus</string>
+    <string name="empty">-</string>
+    <string name="latitud_example">19.11038594994151</string>
+    <string name="longitude">Longitud</string>
 </resources>
