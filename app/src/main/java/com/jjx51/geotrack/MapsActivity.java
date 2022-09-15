@@ -10,6 +10,7 @@ import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -31,14 +32,15 @@ import com.jjx51.geotrack.databinding.ActivityMapsBinding;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
 
+    private static final String TAG = "MapsActivity";
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
     private GeofencingClient geofencingClient;
     private GeofenceHelper geofenceHelper;
     //
-    private static final String TAG = "MapsActivity";
     private int FINE_LOCATION_ACCESS_REQUEST_CODE=10001;
     private int BACKGROUND_LOCATION_ACCESS_REQUEST_CODE = 10002;
+
     private float GEOFENCE_RADIUS = 50;
     private String GEOFENCE_ID="SOME_GEOFENCE_ID"; //Hardcode
 
@@ -63,9 +65,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
         LatLng initialLocation = new LatLng(19.11038594994151, -98.27016461542577);
-        //mMap.addMarker(new MarkerOptions().position(initialLocation).title("Initial location"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(initialLocation,18));
 
         enableUserLocation();
@@ -111,20 +111,42 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    @Override
-    public void onMapLongClick(@NonNull LatLng latLng) {
+    private void handleMapLongClick(LatLng latLng) {
         mMap.clear();
         addMarker(latLng);
-        addCircle(latLng,GEOFENCE_RADIUS);
-        addGeofence(latLng,GEOFENCE_RADIUS);
+        addCircle(latLng, GEOFENCE_RADIUS);
+        addGeofence(latLng, GEOFENCE_RADIUS);
     }
+
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+        if (Build.VERSION.SDK_INT >= 29) {
+            //We need background permission
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                handleMapLongClick(latLng);
+            } else {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
+                    //We show a dialog and ask for permission
+                    ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_BACKGROUND_LOCATION}, BACKGROUND_LOCATION_ACCESS_REQUEST_CODE);
+                } else {
+                    ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_BACKGROUND_LOCATION}, BACKGROUND_LOCATION_ACCESS_REQUEST_CODE);
+                }
+            }
+
+        } else {
+            handleMapLongClick(latLng);
+        }
+
+    }
+
 
     @SuppressLint("MissingPermission")
     private void addGeofence(LatLng latLng, float radius){
         Geofence geofence = geofenceHelper.getGeofence(GEOFENCE_ID,latLng,radius,Geofence.GEOFENCE_TRANSITION_ENTER|Geofence.GEOFENCE_TRANSITION_DWELL|Geofence.GEOFENCE_TRANSITION_EXIT);
         GeofencingRequest geofencingRequest= geofenceHelper.getGeofencingRequest(geofence);
         PendingIntent pendingIntent = geofenceHelper.getPendingIntent();
-        geofencingClient.addGeofences(geofencingRequest,pendingIntent).addOnSuccessListener(new OnSuccessListener<Void>() {
+        geofencingClient.addGeofences(geofencingRequest,pendingIntent)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
                 Log.d(TAG, "onSuccess: Geofence Added");
@@ -133,6 +155,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onFailure(@NonNull Exception e) {
                 String errorMessage = geofenceHelper.getErrorString(e);
+                Log.d(TAG, "onFailure: Aqui falla");
                 Log.d(TAG, "onFailure: "+errorMessage);
             }
         });
