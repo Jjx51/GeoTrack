@@ -1,4 +1,4 @@
-package com.jjx51.geotrack;
+package com.jjx51.geotrack.ui.views;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,6 +33,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.jjx51.geotrack.Data.Model.StatusGeofenceModel;
+import com.jjx51.geotrack.Services.GeofenceHelper;
+import com.jjx51.geotrack.R;
 import com.jjx51.geotrack.Repository.StatusGeofenceRepository;
 import com.jjx51.geotrack.databinding.ActivityMapsBinding;
 
@@ -40,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public static final String TAG= MainActivity.class.getName();
     private GoogleMap mMap;
     //
-    private ActivityMapsBinding binding;
     private GeofencingClient geofencingClient;
     private GeofenceHelper geofenceHelper;
     //
@@ -137,7 +138,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void saveData(LatLng latLng) {
         StatusGeofenceRepository statusGeofenceRepository = new StatusGeofenceRepository();
-        //
         StatusGeofenceModel statusGeofence= new StatusGeofenceModel(latLng.longitude,latLng.latitude,false);
         statusGeofenceRepository.createData(statusGeofence);
     }

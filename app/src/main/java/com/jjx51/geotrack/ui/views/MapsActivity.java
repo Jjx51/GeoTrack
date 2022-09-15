@@ -1,4 +1,4 @@
-package com.jjx51.geotrack;
+package com.jjx51.geotrack.ui.views;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -28,13 +28,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.jjx51.geotrack.databinding.ActivityMapsBinding;
+import com.jjx51.geotrack.Services.GeofenceHelper;
+import com.jjx51.geotrack.R;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
 
     private static final String TAG = "MapsActivity";
     private GoogleMap mMap;
-    private ActivityMapsBinding binding;
+    private com.jjx51.geotrack.databinding.ActivityMapsBinding binding;
     private GeofencingClient geofencingClient;
     private GeofenceHelper geofenceHelper;
     //
@@ -48,7 +49,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityMapsBinding.inflate(getLayoutInflater());
+        binding = com.jjx51.geotrack.databinding.ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.

@@ -1,4 +1,4 @@
-package com.jjx51.geotrack;
+package com.jjx51.geotrack.Services;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -11,8 +11,9 @@ import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofenceStatusCodes;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.maps.model.LatLng;
+import com.jjx51.geotrack.Services.GeofenceBroadcastReceiver;
 
-class GeofenceHelper extends ContextWrapper {
+public class GeofenceHelper extends ContextWrapper {
 
     public static final String TAG = "GeofenceHelper";
     PendingIntent pendingIntent;

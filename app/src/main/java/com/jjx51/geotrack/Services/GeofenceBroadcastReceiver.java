@@ -1,4 +1,4 @@
-package com.jjx51.geotrack;
+package com.jjx51.geotrack.Services;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
