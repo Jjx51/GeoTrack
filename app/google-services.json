@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "174423739318",
+    "project_id": "geotrack-f337b",
+    "storage_bucket": "geotrack-f337b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:174423739318:android:de7f94e7935b66913d4f17",
+        "android_client_info": {
+          "package_name": "com.jjx51.geotrack"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "174423739318-fa5qp877p4tsae4gi7i172ad1gidgui1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jjx51.geotrack",
+            "certificate_hash": "50ef741d75382239b0042866695f5cf2dca54c9c"
+          }
+        },
+        {
+          "client_id": "174423739318-g95u3obu36eh3mi1c3ak3jknvqhqj55l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBXOXY2ARhC7XLFQO7Bc7jsviXo06Rjzxk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "174423739318-g95u3obu36eh3mi1c3ak3jknvqhqj55l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
